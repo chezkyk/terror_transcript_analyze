@@ -231,4 +231,8 @@ def analyze_transcript_words(transcript_number, word_witaout_start=None):
                 continue
     return list_of_words
 
-print(analyze_transcript_words(0))
+def start_program():
+    for i in range(NUMBER_OF_SCRIPT_FILES):
+        print(analyze_transcript_words(i))
+
+start_program()

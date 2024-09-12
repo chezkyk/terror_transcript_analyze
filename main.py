@@ -178,9 +178,13 @@ def return_a_transcript_list(transcript_number):
     text = list_of_text_files_contents[transcript_number]
     for pattern in patterns:
         text = re.sub(pattern, lambda x: x.group(0).replace(" ", "_"), text)
-    words = re.findall(r'\b[\w׳]+|\d{2}:\d{2}\b', text)
+
+    words = re.findall(r'\b[\w׳]+|\d{2}:\d{2}|\S', text)
+
     words = [word.replace("_", " ") for word in words]
+
     return words
+
 # transcript_number = 0
 # transcript_list = return_a_transcript_list(transcript_number)
 # print(transcript_list)
@@ -205,13 +209,16 @@ def analyze_transcript_words(transcript_number, word_witaout_start=None):
     list_of_words = return_a_transcript_list(transcript_number)
     for i in range(0, len(list_of_words)):
         all_word = list_of_words[i]
+
         word_witaout_start = all_word[1:]
         known_word1 = search_if_word_is_in_known_words(all_word)
         known_word2 = search_if_word_is_in_known_words(word_witaout_start)
         if known_word1 != None:
-            list_of_words[i] = known_word1
+            if type(known_word1) == list:
+                list_of_words[i] = "/".join(known_word1)
         elif known_word2 != None:
-            list_of_words[i] = known_word2
+            if type(known_word2) == list:
+                list_of_words[i] = "/".join(known_word2)
         else:
             ans_all_word = search_if_word_is_a_code_word(all_word)
             ans_word_witaout_start = search_if_word_is_a_code_word(word_witaout_start)
@@ -226,13 +233,21 @@ def analyze_transcript_words(transcript_number, word_witaout_start=None):
                     list_of_words[i] = ans2
                     continue
                 else:
-                    list_of_words[i] = None
+                    list_of_words[i] = list_of_words[i]
             else:
                 continue
     return list_of_words
 
+
 def start_program():
     for i in range(NUMBER_OF_SCRIPT_FILES):
-        print(analyze_transcript_words(i))
+        sentence_list = analyze_transcript_words(i)
+
+        sentence_list = [str(item) if not isinstance(item, str) else item for item in sentence_list]
+
+        sentence = " ".join(sentence_list).replace(" ,", ",").replace(" .", ".")
+
+        print(sentence)
+
 
 start_program()

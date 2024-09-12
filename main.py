@@ -216,9 +216,13 @@ def analyze_transcript_words(transcript_number, word_witaout_start=None):
         if known_word1 != None:
             if type(known_word1) == list:
                 list_of_words[i] = "/".join(known_word1)
+            else:
+                list_of_words[i] = known_word1
         elif known_word2 != None:
             if type(known_word2) == list:
                 list_of_words[i] = "/".join(known_word2)
+            else:
+                list_of_words[i] = known_word2
         else:
             ans_all_word = search_if_word_is_a_code_word(all_word)
             ans_word_witaout_start = search_if_word_is_a_code_word(word_witaout_start)
